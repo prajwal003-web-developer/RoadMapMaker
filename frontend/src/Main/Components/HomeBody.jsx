@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import api from "../../api";
 
-const URL = import.meta.env.VITE_URL
+const URL = import.meta.env.VITE_URL;
 
 const steps = [
   "Processing data",
@@ -30,10 +30,9 @@ const HomeBody = () => {
   const [loading, setLoading] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
 
-  const { userId ,getToken} = useAuth();
+  const { userId, getToken } = useAuth();
 
   const [Socket, setSocket] = useState(null);
-
 
   useEffect(() => {
     let socket;
@@ -46,16 +45,12 @@ const HomeBody = () => {
       setSocket(socket);
     }
 
-    socket.on('passedLevel',()=>{
-      setStepIndex(p=>p+1)
-    })
-
+    socket.on("passedLevel", () => {
+      setStepIndex((p) => p + 1);
+    });
 
     return () => socket?.close();
   }, [userId]);
-
-
-
 
   const handleSubmit = async () => {
     if (!aim || !level || !timeline) {
@@ -65,28 +60,29 @@ const HomeBody = () => {
     setLoading(true);
 
     try {
-      const token = await getToken()
-      const data = await api.post('/project/get-roadmap',{aim,level,timeline},{
+      const token = await getToken();
+      const data = await api.post(
+        "/project/get-roadmap",
+        { aim, level, timeline },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
+        }
+      );
 
-      console.log(data.data[0])
+      setStepIndex(6);
+      location.reload();
+
+      console.log(data.data[0]);
     } catch (error) {
       toast.error("Failed To Fetch");
-    }
-    finally{
+    } finally {
       //setLoading(false)
-      setStepIndex(5)
-      location.reload()
     }
-
-    
   };
 
   // simulate backend steps
-  
 
   return (
     <div className="bg-black flex justify-center items-center rounded h-[98dvh] text-zinc-200">
@@ -194,9 +190,14 @@ const HomeBody = () => {
             ))}
           </div>
 
-          {stepIndex === steps.length-1 && (
-            <button className="mt-6 w-full py-3 rounded-xl bg-zinc-700 hover:bg-zinc-600 transition">
-              Visit Roadmap →
+          {stepIndex === steps.length - 1 && (
+            <button
+              onClick={() => {
+                location.reload();
+              }}
+              className="mt-6 w-full py-3 rounded-xl bg-zinc-700 hover:bg-zinc-600 transition"
+            >
+              Refresh page →
             </button>
           )}
         </div>

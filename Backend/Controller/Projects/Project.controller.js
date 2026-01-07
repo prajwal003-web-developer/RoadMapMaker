@@ -54,7 +54,6 @@ export const CreateProject = async (req, res) => {
 
         const data = await getData(UserDataFromFrontEnd, userId)
 
-        io.emit('passedLevel', 1)
 
         const actData = transformRoadmap(data.data)
         
