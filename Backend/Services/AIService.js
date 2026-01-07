@@ -6,7 +6,7 @@ import { ENV } from "./ENV.js";
 
 
 const ai = new GoogleGenAI({
-    apiKey:ENV.AI_API_KEY
+  apiKey: ENV.AI_API_KEY
 });
 
 
@@ -17,98 +17,73 @@ const ai = new GoogleGenAI({
 //   });
 
 
-export const getData = async (data,userId)=>{
-    try {
+export const getData = async (data, userId) => {
+  try {
 
-        const prompt = getPrompt(data)
-        const response = await ai.models.generateContent({
-            model:'gemini-2.5-flash',
-            contents:prompt,
-        })
-        
-        const aiText = response.text
-        
-        console.log("apple")
+    const prompt = getPrompt(data)
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+    })
 
-        return parseAIJson(aiText)
-        
-    } catch (error) {
-        throw new Error(error)
-    }
+    const aiText = response.text
+
+    console.log("apple")
+
+    return parseAIJson(aiText)
+
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 
-const getPrompt = (query)=>{
-    const prompt = `You are an expert career and learning roadmap generator.
+const getPrompt = (query) => {
+  const prompt = `You are an expert career and learning roadmap creator.
 
-Task: Generate a weekly roadmap for a user based on their goal. The user will provide a query describing what they want to become or learn. 
+Generate a practical weekly roadmap based on the user's aim and time.
 
-Output format: ONLY return JSON. The structure should be an Object with name for suitable Roadmap Name and data as  array where each element is a week/month object. Each week/month object should have:
-- Key: "week-{number}" (e.g., "week-1")
-- Value: An array of topic objects
-- Each topic object should have:
-    - Key: "topic"
-    - Value: An array of subtopic objects
-    - name: Suitable Name accordibg to subtopics
-    - explaination: 50 to 60 word explanation of main topics to make i easier
-- Each subtopic object should have:
-    - Key: "subtopics"
-    - Value: An array of objects with a "name" key (the subtopic name)
+Input query (stringified JSON): ${JSON.stringify(query)}
+
+Output: ONLY valid JSON parsable by JSON.parse.
+Structure:
+{
+  name: "Roadmap Name",
+  data: [
+    {
+      "week-{number}": [
+        {
+          name: "Topic Name",
+          explaination: "50–60 word description",
+          topic: [
+            {
+              subtopics: [
+                { "name": "Subtopic 1" },
+                { "name": "Subtopic 2" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
 
 Rules:
-1. No extra text, only JSON.
-2. Include 4–8 weeks/months if is for larger period like year, each with 1–3 topics, each topic with 2–5 subtopics if user gave any query then you can overide This rule.
-3. Ensure the roadmap is practical and sequential, starting from beginner concepts to advanced.
-4. Avoid repeating subtopics.
-5. Use clear, concise names for topics and subtopics.
-6. give me in JSON version that can be parsed by JSON.parse.
+- 4–8 weeks unless user goal implies otherwise
+- Each week has 1–3 topics; each topic 2–5 subtopics
+- Beginner → advanced progression
+- No repeated subtopics
+- Clear concise names
+- Output ONLY JSON — no extra text
 
-Example input from user:
-"I want to become a web developer"
+User query describes: what they want to become/learn.
 
-Example output:
-{
-name:"Roadmap-Name",
-data:[
-  {
-    "week-1": [
-      {
-        name:'Suitable Topic Name',
-        explaination:"Explain the topic and short topics on short",
-        "topic": [
-          {
-            "subtopics": [
-              {"name": "HTML Basics"},
-              {"name": "CSS Fundamentals"}
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "week-2": [
-      {
-        name:'Suitable Topic Name',
-        explaination:"Explain the topic and short topics on short",
-        "topic": [
-          {
-            "subtopics": [
-              {"name": "JavaScript Basics"},
-              {"name": "DOM Manipulation"}
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]}
+Now generate the roadmap.`
 
-Now generate the roadmap for the user query: "${query}"
-`
-
-return prompt
+  return prompt;
 }
+
 
 
 function parseAIJson(text) {
