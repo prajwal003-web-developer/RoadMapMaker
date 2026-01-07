@@ -14,7 +14,7 @@ const Landing = () => {
       <Navbar />
 
       {/* HERO — visually different */}
-      <section className="relative h-[100dvh] flex items-center overflow-hidden">
+      <section className="relative h-[100dvh] pt-24 flex items-center overflow-hidden">
         <div className="absolute inset-0 blur-3xl opacity-20 bg-gradient-to-r from-purple-700 via-blue-600 to-indigo-700"></div>
 
         <div className="relative max-w-6xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
