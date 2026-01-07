@@ -8,6 +8,7 @@ import Navbar from './Components/Navbar';
 import LoadingComponent from './LoadingComponent';
 import HomeSideBar from './Components/HomeSideBar';
 import useHomePage from './Zustand/homePage';
+import { toast } from 'react-toastify';
 
 const Layout = ({children}) => {
   const {setAllRoadMaps} = useRoadmap()
@@ -19,8 +20,9 @@ const Layout = ({children}) => {
        useEffect(()=>{
         const fetchMaps = async()=>{
           try {
-            const data = await api.get('/project/get')
-            setAllRoadMaps(data.data.data)
+            const data = await api.get('/project/getsh')
+            setAllRoadMaps(data?.data?.data)
+            console.log(data)
           } catch (error) {
             toast.error("Couldnt Fetch")
           }

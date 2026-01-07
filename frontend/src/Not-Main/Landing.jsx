@@ -1,10 +1,12 @@
 import React from "react";
 import Navbar from "./Components/Navbar";
-import { useUser } from "@clerk/clerk-react";
+import { useClerk, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
-  const { isSignedIn } = useUser();
+  const { isSignedIn } = useUser()
+  
+   const { openSignIn } = useClerk();
   const navigate = useNavigate();
 
   return (
@@ -43,7 +45,7 @@ const Landing = () => {
                 </button>
               ) : (
                 <button
-                  onClick={() => navigate("/sign-in")}
+                  onClick={openSignIn}
                   className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 transition shadow-lg shadow-purple-800/30"
                 >
                   Get Started

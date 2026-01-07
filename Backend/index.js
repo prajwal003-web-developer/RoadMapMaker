@@ -29,12 +29,6 @@ app.use(clerkMiddleware())
 // ---------------------- ROUTES ----------------------
 app.use("/api/project", ProjectRouter); 
 
-let num = 6;
-
-app.get("/", (req, res) => {
-  res.status(200).json({ data: num++ });
-});
-
 // ---------------------- MONGODB CONNECTION ----------------------
 
 mongoose

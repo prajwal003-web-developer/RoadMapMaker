@@ -13,6 +13,8 @@ import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import api from "../../api";
 
+const URL = import.meta.env.VITE_URL
+
 const steps = [
   "Processing data",
   "Fetching roadmap data",
@@ -35,7 +37,7 @@ const HomeBody = () => {
   useEffect(() => {
     let socket;
     if (userId) {
-      socket = io("http://localhost:5000", {
+      socket = io(URL, {
         query: {
           userId: userId,
         },
