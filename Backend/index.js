@@ -5,7 +5,6 @@ import { Server } from "socket.io";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { clerkMiddleware } from "@clerk/express"; 
-import { ENV } from "./Services/ENV.js";
 import ProjectRouter from "./View/Project.View.js";
 
 import {app,server}  from './Services/Socket.js'
@@ -24,7 +23,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(clerkMiddleware()) 
+//app.use(clerkMiddleware()) 
 
 // ---------------------- ROUTES ----------------------
 app.use("/api/project", ProjectRouter); 

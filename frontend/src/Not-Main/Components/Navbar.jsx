@@ -10,8 +10,6 @@ import React from "react";
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
   const { openSignIn, signOut } = useClerk();
-
-  console.log(user)
   return (
     <nav className="p-4 z-30 flex justify-between items-center border-b border-solid bg-black fixed top-0 left-0 right-0 border-gray-700">
       <div className="text-xl select-none font-extrabold bg-clip-text text-transparent bg-gradient-to-br from-red-500 to-blue-600">
