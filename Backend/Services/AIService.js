@@ -25,16 +25,14 @@ export const getData = async (data,userId)=>{
             model:'gemini-2.5-flash',
             contents:prompt,
         })
-
-
-
+        
         const aiText = response.text
         
+        console.log("apple")
+
         return parseAIJson(aiText)
         
     } catch (error) {
-
-        console.log(error)
         throw new Error(error)
     }
 }

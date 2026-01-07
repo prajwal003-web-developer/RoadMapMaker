@@ -74,9 +74,7 @@ const HomeBody = () => {
 
       console.log(data.data[0])
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || error?.message || "Failed To Do So"
-      );
+      toast.error("Failed To Fetch");
     }
     finally{
       //setLoading(false)
