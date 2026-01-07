@@ -20,9 +20,8 @@ const Layout = ({children}) => {
        useEffect(()=>{
         const fetchMaps = async()=>{
           try {
-            const data = await api.get('/project/getsh')
+            const data = await api.get(`/project`)
             setAllRoadMaps(data?.data?.data)
-            console.log(data)
           } catch (error) {
             toast.error("Couldnt Fetch")
           }
