@@ -30,9 +30,10 @@ const HomeBody = () => {
   const [loading, setLoading] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
 
-  const { userId } = useAuth();
+  const { userId ,getToken} = useAuth();
 
   const [Socket, setSocket] = useState(null);
+
 
   useEffect(() => {
     let socket;
@@ -64,7 +65,12 @@ const HomeBody = () => {
     setLoading(true);
 
     try {
-      const data = await api.post('/project/get-roadmap',{aim,level,timeline})
+      const token = await getToken()
+      const data = await api.post('/project/get-roadmap',{aim,level,timeline},{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
       console.log(data.data[0])
     } catch (error) {
