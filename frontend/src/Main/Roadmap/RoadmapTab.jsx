@@ -6,6 +6,8 @@ import { MdCircle, MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import api from "../../api";
 import useRoadmap from "../Zustand/Roadmap";
 
+import { useAuth } from "@clerk/clerk-react";
+
 const RoadmapTab = ({ setreFetch,project }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -110,6 +112,8 @@ const CompleteRoadMap = ({ project,setreFetch }) => {
 
   const {ReplaceRoadMap} = useRoadmap()
 
+  const { getToken } = useAuth();
+
 
   const HandleRead = async (data) => {
     if (Loading) {
@@ -118,11 +122,20 @@ const CompleteRoadMap = ({ project,setreFetch }) => {
     try {
       setLoading(true);
       let datax
+      const token = await getToken();
       if (data?.isCompleted) {
-         datax = await api.get(`/project/mark-as-unread/${data?._id}/${id}`);
+         datax = await api.get(`/project/mark-as-unread/${data?._id}/${id}`,{
+          headers:{
+            Authorization:`Bearer ${token}`,
+          }
+         });
 
       } else {
-        datax = await api.get(`/project/mark-as-read/${data?._id}/${id}`);
+        datax = await api.get(`/project/mark-as-read/${data?._id}/${id}`,{
+          headers:{
+            Authorization:`Bearer ${token}`,
+          }
+         });
         
       }
       ReplaceRoadMap(id,datax.data.data)

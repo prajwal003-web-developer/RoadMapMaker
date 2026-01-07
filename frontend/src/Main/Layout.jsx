@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Protect, useUser } from "@clerk/clerk-react";
-import RedirectToHome from '../Not-Main/Components/RedirectToHome';
-import useRoadmap from './Zustand/Roadmap';
-import api from '../api';
-import Navbar from './Components/Navbar';
-import LoadingComponent from './LoadingComponent';
-import HomeSideBar from './Components/HomeSideBar';
-import useHomePage from './Zustand/homePage';
-import { toast } from 'react-toastify';
+import RedirectToHome from "../Not-Main/Components/RedirectToHome";
+import useRoadmap from "./Zustand/Roadmap";
+import api from "../api";
+import Navbar from "./Components/Navbar";
+import LoadingComponent from "./LoadingComponent";
+import HomeSideBar from "./Components/HomeSideBar";
+import useHomePage from "./Zustand/homePage";
+import { toast } from "react-toastify";
+import { useAuth } from "@clerk/clerk-react";
 
 const Layout = ({ children }) => {
+  const { getToken } = useAuth();
 
   const { setAllRoadMaps } = useRoadmap();
-  const isOpen = useHomePage(p => p.isOpen);
+  const isOpen = useHomePage((p) => p.isOpen);
 
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +25,12 @@ const Layout = ({ children }) => {
 
     const fetchMaps = async () => {
       try {
-        const res = await api.get('/project/get-all');
+        const token = await getToken();
+        const res = await api.get("/project/get-all", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setAllRoadMaps(res.data.data);
       } catch (err) {
         toast.error("Couldn't fetch");
