@@ -15,7 +15,7 @@ dotenv.config();
 // Enable CORS
 app.use(
   cors({
-    origin: true, // allow all origins (use ENV.FRONTEND_URL in production)
+    origin: ["http://localhost:5173","https://ai-roadmap-maker.netlify.app"], // allow all origins (use ENV.FRONTEND_URL in production)
     credentials: true,
   })
 );
