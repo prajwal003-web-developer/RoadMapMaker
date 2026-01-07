@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-
-import {  Protect, useUser } from "@clerk/clerk-react";
+import React, { useEffect, useState } from 'react';
+import { Protect, useUser } from "@clerk/clerk-react";
 import RedirectToHome from '../Not-Main/Components/RedirectToHome';
 import useRoadmap from './Zustand/Roadmap';
 import api from '../api';
@@ -10,44 +9,44 @@ import HomeSideBar from './Components/HomeSideBar';
 import useHomePage from './Zustand/homePage';
 import { toast } from 'react-toastify';
 
-const Layout = ({children}) => {
-  const {setAllRoadMaps} = useRoadmap()
+const Layout = ({ children }) => {
 
-  const isOpen = useHomePage(p=>p.isOpen)
-  
-      const [Loading, setLoading] = useState(true)
+  const { setAllRoadMaps } = useRoadmap();
+  const isOpen = useHomePage(p => p.isOpen);
 
-      const {isLoaded} = useUser()
-  
-       useEffect(()=>{
-        const fetchMaps = async()=>{
-          try {
-            const data = await api.get(`/project/get-all`)
-            setAllRoadMaps(data?.data?.data)
-          } catch (error) {
-            toast.error("Couldnt Fetch")
-          }
-          finally{
-            setLoading(false)
-          }
-        }
-  
-        if(isLoaded){
-          fetchMaps()
-        }
-  
-       },[isLoaded])
+  const [loading, setLoading] = useState(true);
 
-       if (Loading && isLoaded) return <LoadingComponent/>
+  const { isLoaded, isSignedIn } = useUser();
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn) return;
+
+    const fetchMaps = async () => {
+      try {
+        const res = await api.get('/project/get-all');
+        setAllRoadMaps(res.data.data);
+      } catch (err) {
+        toast.error("Couldn't fetch");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMaps();
+  }, [isLoaded, isSignedIn]);
+
+  // show loader while clerk OR api is loading
+  if (!isLoaded || loading) return <LoadingComponent />;
+
   return (
-     <Protect fallback={<RedirectToHome/>}>
-        <Navbar />
-        <HomeSideBar/>
-        <div className={` h-[98dvh] ${!!isOpen ? "md:pl-[16rem]" : "p-1"} `}s>
-          {children}
-        </div>
-     </Protect>
-  )
-}
+    <Protect fallback={<RedirectToHome />}>
+      <Navbar />
+      <HomeSideBar />
+      <div className={`h-[98dvh] ${isOpen ? "md:pl-[16rem]" : "p-1"}`}>
+        {children}
+      </div>
+    </Protect>
+  );
+};
 
-export default Layout
+export default Layout;

@@ -23,7 +23,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//app.use(clerkMiddleware()) 
+app.use(clerkMiddleware())
 
 // ---------------------- ROUTES ----------------------
 app.use("/api/project", ProjectRouter); 

@@ -203,6 +203,8 @@ export const getRoadMap = async (req,res)=>{
     try {
         const { userId } = getAuth(req)
 
+        console.log("Here We Are")
+
         const data = await Project.find({userId:userId})
 
         return res.status(200).json({
